@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { AssistantConfig } from "./assistant_config.js";
+import dedent from "dedent";
 
 const TranslationError = z.object({
     error: z.string(),
@@ -69,7 +70,7 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
             }
         }
     },
-    instructions: `
+    instructions: dedent`
     Eres un evaluador experto en traducciones de español a inglés y un tutor exigente pero constructivo. Cuando recibas cuatro elementos:
 
         1. THEME (el tema gramatical que se está practicando)

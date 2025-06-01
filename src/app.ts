@@ -3,11 +3,18 @@ import { SentenceGenerator } from "./services/sentence_generator";
 import { TranslationAnalyser } from "./services/translation_analyser";
 import type { Sentence } from "./assistant/configs/sentence_generator";
 import type { TranslationError } from "./assistant/configs/translation_analyser";
+import RequiredWordsService from "./services/required_words_service";
 
 class App {
+    private openai?: OpenAI;
+    private sentenceGenerator?: SentenceGenerator;
+    private translationAnalyser?: TranslationAnalyser;
+    private requiredWordsService?: RequiredWordsService;
+
     private currentSentences: Sentence[];
     private currentSentenceIndex: number;
-    private openai?: OpenAI;
+    private requiredWords: Set<string>;
+
     private themeInput: HTMLInputElement;
     private startButton: HTMLButtonElement;
     private listenButton: HTMLButtonElement;
@@ -23,14 +30,19 @@ class App {
     private correctTranslationFeedback: HTMLElement;
     private userTranslationFeedback: HTMLElement;
     private nextButton: HTMLButtonElement;
-    private sentenceGenerator?: SentenceGenerator;
-    private translationAnalyser?: TranslationAnalyser;
+    private requiredWordInput: HTMLInputElement;
+    private addWordButton: HTMLButtonElement;
+    private requiredWordsList: HTMLElement;
+    private toggleRequiredWordsBtn: HTMLButtonElement;
+    private closeRequiredWordsBtn: HTMLButtonElement;
+    private requiredWordsSection: HTMLDivElement;
 
     constructor() {
         this.currentSentences = [];
         this.currentSentenceIndex = 0;
-
-        // Elementos del DOM
+        this.requiredWords = new Set();
+        
+            // Elementos del DOM
         this.themeInput = document.getElementById('themeInput') as HTMLInputElement;
         this.startButton = document.getElementById('startButton') as HTMLButtonElement;
         this.practiceSection = document.getElementById('practiceSection') as HTMLElement;
@@ -46,10 +58,21 @@ class App {
         this.userTranslationFeedback = document.getElementById('userTranslationFeedback') as HTMLElement;
         this.nextButton = document.getElementById('nextButton') as HTMLButtonElement;
         this.listenButton = document.getElementById('listenButton') as HTMLButtonElement;
+        this.requiredWordInput = document.getElementById('requiredWordInput') as HTMLInputElement;
+        this.addWordButton = document.getElementById('addWordButton') as HTMLButtonElement;
+        this.requiredWordsList = document.getElementById('requiredWordsList') as HTMLElement;
+        this.toggleRequiredWordsBtn = document.getElementById('toggleRequiredWords') as HTMLButtonElement;
+        this.closeRequiredWordsBtn = document.getElementById('closeRequiredWords') as HTMLButtonElement;
+        this.requiredWordsSection = document.querySelector('.required-words-section') as HTMLDivElement;
+
         // Event listeners
         this.startButton.addEventListener('click', () => this.startPractice());
         this.checkButton.addEventListener('click', () => this.checkTranslation());
         this.nextButton.addEventListener('click', () => this.nextSentence());
+        this.addWordButton.addEventListener('click', () => this.addRequiredWord());
+        this.requiredWordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.addRequiredWord();
+        });
         this.themeInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.startPractice();
         });
@@ -60,9 +83,57 @@ class App {
             }
         });
         this.listenButton.addEventListener('click', () => this.listenSentence());
+        this.toggleRequiredWordsBtn.addEventListener('click', () => {
+            this.requiredWordsSection.classList.toggle('hidden');
+        });
+        this.closeRequiredWordsBtn.addEventListener('click', () => {
+            this.requiredWordsSection.classList.add('hidden');
+        });
+
         // Load dependencies
-        this.loadDependencies();
+        this.init();
+    }
+
+    async init() {
+        await this.loadDependencies();
+        this.loadRequiredWords();
         speechSynthesis.getVoices();
+    }
+
+    private addRequiredWord() {
+        const word = this.requiredWordInput.value.trim();
+        if (!word) return;
+
+        if (this.requiredWords.has(word)) {
+            alert('Esta palabra o frase ya está en la lista');
+            return;
+        }
+
+        this.requiredWords.add(word);
+        this.requiredWordsService!.addWord(word);
+        this.updateRequiredWordsList();
+        this.requiredWordInput.value = '';
+        this.requiredWordInput.focus();
+    }
+
+    private removeRequiredWord(word: string) {
+        this.requiredWords.delete(word);
+        this.requiredWordsService!.removeWord(word);
+        this.updateRequiredWordsList();
+    }
+
+    private updateRequiredWordsList() {
+        this.requiredWordsList.innerHTML = '';
+        this.requiredWords.forEach(word => {
+            const tag = document.createElement('div');
+            tag.className = 'required-word-tag';
+            tag.innerHTML = `
+                ${word}
+                <button type="button" aria-label="Eliminar ${word}">×</button>
+            `;
+            tag.querySelector('button')?.addEventListener('click', () => this.removeRequiredWord(word));
+            this.requiredWordsList.appendChild(tag);
+        });
     }
 
     async getApiKey() {
@@ -89,6 +160,14 @@ class App {
         }
         this.sentenceGenerator = new SentenceGenerator(this.openai!);
         this.translationAnalyser = new TranslationAnalyser(this.openai!);
+        this.requiredWordsService = new RequiredWordsService();
+    }
+
+    private loadRequiredWords() {
+        const requiredWords = this.requiredWordsService!.getRequiredWords();
+        this.requiredWords = new Set(requiredWords);
+        console.log(this.requiredWords);
+        this.updateRequiredWordsList();
     }
 
     async startPractice() {
@@ -107,7 +186,8 @@ class App {
             this.startButton.disabled = true;
             this.startButton.textContent = 'Cargando...';
 
-            this.currentSentences = await this.sentenceGenerator!.generateSentences(theme);
+            const requiredWordsArray = Array.from(this.requiredWords);
+            this.currentSentences = await this.sentenceGenerator!.generateSentences(theme, requiredWordsArray);
             this.currentSentenceIndex = 0;
 
             this.practiceSection.classList.remove('hidden');

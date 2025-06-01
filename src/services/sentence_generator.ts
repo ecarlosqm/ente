@@ -6,6 +6,7 @@ import {
     SENTENCE_GENERATOR_CONFIG
 } from "../assistant/configs/sentence_generator.js";
 import type { Sentence } from "../assistant/configs/sentence_generator.js";
+import dedent from "dedent";
 
 export class SentenceGenerator {
     private assistant: Assistant;
@@ -14,9 +15,16 @@ export class SentenceGenerator {
         this.assistant = new Assistant(SENTENCE_GENERATOR_CONFIG, client);
     }
 
-    public async generateSentences(theme: string): Promise<Sentence[]> {
+    public async generateSentences(theme: string, requiredWords: string[] = []): Promise<Sentence[]> {
+        const requiredWordsText = requiredWords.length > 0 
+            ? `PALABRAS_REQUERIDAS: ${requiredWords.join(', ')}`
+            : '';
+            
         const response = await this.assistant.sendMessage<GenerateSentencesResponse>(
-            `TEMA_GRAMATICAL: ${theme}`,
+            dedent`
+            TEMA_GRAMATICAL: ${theme}
+            ${requiredWordsText}
+            `,
             GenerateSentencesResponseSchema.parse
         );
         return response.sentences;

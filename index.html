@@ -14,6 +14,21 @@
                 <button id="startButton" class="primary-button">Comenzar</button>
             </div>
 
+            <button id="toggleRequiredWords" class="floating-button">📝</button>
+            <div class="required-words-section hidden">
+                <div class="required-words-header">
+                    <button id="closeRequiredWords" class="close-button">×</button>
+                    <p class="help-text">Añade palabras o frases que deben aparecer en las oraciones generadas</p>
+                </div>
+                <div class="required-words-input">
+                    <input type="text" id="requiredWordInput" placeholder="Añade una palabra o frase" class="theme-input">
+                    <button id="addWordButton" class="primary-button">Añadir</button>
+                </div>
+                <div id="requiredWordsList" class="required-words-list">
+                    <!-- Las palabras requeridas se añadirán aquí dinámicamente -->
+                </div>
+            </div>
+
             <div id="practiceSection" class="practice-section hidden">
                 <div id="sentenceSection" class="sentence-card hidden">
                     <div class="sentence-header">
