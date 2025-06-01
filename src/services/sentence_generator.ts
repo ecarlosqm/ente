@@ -17,7 +17,7 @@ export class SentenceGenerator {
 
     public async generateSentences(theme: string, requiredWords: string[] = []): Promise<Sentence[]> {
         const requiredWordsText = requiredWords.length > 0 
-            ? `PALABRAS_REQUERIDAS: ${requiredWords.join(', ')}`
+            ? `PALABRAS_SEMILLA: ${requiredWords.join(', ')}`
             : '';
             
         const response = await this.assistant.sendMessage<GenerateSentencesResponse>(
