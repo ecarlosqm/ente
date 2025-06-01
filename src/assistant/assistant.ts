@@ -1,6 +1,6 @@
 import OpenAI from 'openai';
-import { AssistantConfig } from './configs/assistant_config.js';
-import { Logger } from '../utils/logger.js';
+import type { AssistantConfig } from './configs/assistant_config.js';
+import { logger } from '../utils/logger.js';
 
 type Parser<T> = (response: any) => T;
 
@@ -8,9 +8,9 @@ export class Assistant {
     private client: OpenAI;
     private config: AssistantConfig;
 
-    constructor(config: AssistantConfig) {
-        this.config = config
-        this.client = new OpenAI({});
+    constructor(config: AssistantConfig, client: OpenAI) {
+        this.config = config;
+        this.client = client;
     }
 
     public async sendMessage<T>(content: string, parser: Parser<T>): Promise<T> {
@@ -21,7 +21,7 @@ export class Assistant {
                 input: content,
                 text: this.config.text
             });
-            Logger.getInstance().info({
+            logger.info({
                 message: 'Assistant response',
                 content: content,
                 response: JSON.parse(response.output_text)

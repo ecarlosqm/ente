@@ -1,5 +1,5 @@
-import { AssistantConfig } from './assistant_config.js';
 import { z } from "zod";
+import type { AssistantConfig } from "./assistant_config.js";
 
 const TranslationError = z.object({
     error: z.string(),

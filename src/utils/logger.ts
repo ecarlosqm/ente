@@ -1,17 +1,20 @@
-import * as fs from 'fs';
-import * as path from 'path';
-
 type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'DEBUG';
+
+interface LogMessage {
+    message: string;
+    [key: string]: any;
+}
 
 export class Logger {
     private static instance: Logger;
-    private logFilePath: string;
-    private readonly MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
-    private readonly MAX_FILES = 5;
+    private readonly isDevelopment: boolean;
 
     private constructor() {
-        this.logFilePath = path.join(process.cwd(), '.logs');
-        this.ensureLogDirectory();
+        // Simple development check - you can customize this based on your build setup
+        this.isDevelopment = typeof window !== 'undefined' && 
+            (window.location.hostname === 'localhost' || 
+             window.location.hostname === '127.0.0.1' ||
+             (window as any).__DEV__ === true);
     }
 
     public static getInstance(): Logger {
@@ -21,59 +24,50 @@ export class Logger {
         return Logger.instance;
     }
 
-    private ensureLogDirectory(): void {
-        const dir = path.dirname(this.logFilePath);
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
+    private formatMessage(level: LogLevel, message: LogMessage): string {
+        const timestamp = new Date().toISOString();
+        return `[${timestamp}] [${level}] ${JSON.stringify(message)}`;
     }
 
-    private rotateLogs(): void {
-        if (!fs.existsSync(this.logFilePath)) return;
-
-        const stats = fs.statSync(this.logFilePath);
-        if (stats.size < this.MAX_FILE_SIZE) return;
-
-        // Rotate existing log files
-        for (let i = this.MAX_FILES - 1; i >= 0; i--) {
-            const oldPath = i === 0 ? this.logFilePath : `${this.logFilePath}.${i}`;
-            const newPath = `${this.logFilePath}.${i + 1}`;
-
-            if (fs.existsSync(oldPath)) {
-                if (i === this.MAX_FILES - 1) {
-                    fs.unlinkSync(oldPath);
-                } else {
-                    fs.renameSync(oldPath, newPath);
-                }
+    private log(level: LogLevel, message: LogMessage): void {
+        const formattedMessage = this.formatMessage(level, message);
+        
+        // Always log to console in development
+        if (this.isDevelopment) {
+            switch (level) {
+                case 'INFO':
+                    console.info(formattedMessage);
+                    break;
+                case 'WARN':
+                    console.warn(formattedMessage);
+                    break;
+                case 'ERROR':
+                    console.error(formattedMessage);
+                    break;
+                case 'DEBUG':
+                    console.debug(formattedMessage);
+                    break;
             }
         }
+
+        // Here you could add remote logging service integration
+        // Example: sendToRemoteLoggingService(level, message);
     }
 
-    private formatMessage(level: LogLevel, message: Record<string, any>): string {
-        const timestamp = new Date().toISOString();
-        return `[${timestamp}] [${level}] ${JSON.stringify(message)}\n`;
+    public info(message: LogMessage): void {
+        this.log('INFO', message);
     }
 
-    private writeLog(level: LogLevel, message: Record<string, any>): void {
-        this.rotateLogs();
-        const formattedMessage = this.formatMessage(level, message);
-        fs.appendFileSync(this.logFilePath, formattedMessage);
+    public warn(message: LogMessage): void {
+        this.log('WARN', message);
     }
 
-    public info(message: Record<string, any>): void {
-        this.writeLog('INFO', message);
+    public error(message: LogMessage): void {
+        this.log('ERROR', message);
     }
 
-    public warn(message: Record<string, any>): void {
-        this.writeLog('WARN', message);
-    }
-
-    public error(message: Record<string, any>): void {
-        this.writeLog('ERROR', message);
-    }
-
-    public debug(message: Record<string, any>): void {
-        this.writeLog('DEBUG', message);
+    public debug(message: LogMessage): void {
+        this.log('DEBUG', message);
     }
 }
 

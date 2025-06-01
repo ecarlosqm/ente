@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practica de Traducción</title>
+    <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+    <div class="container">
+        <main>
+            <div class="theme-section">
+                <input type="text" id="themeInput" placeholder="Introduce el tema gramatical" class="theme-input">
+                <button id="startButton" class="primary-button">Comenzar</button>
+            </div>
+
+            <div id="practiceSection" class="practice-section hidden">
+                <div id="sentenceSection" class="sentence-card hidden">
+                    <div class="sentence-header">
+                        <h2>Traduce la siguiente oración:</h2>
+                    </div>
+                    <div class="sentence-content">
+                        <p id="originalSentence" class="original-sentence"></p>
+                        <textarea id="translationInput" placeholder="Escribe tu traducción aquí..." class="translation-input" spellcheck="false"></textarea>
+                        <p id="contextInfo" class="context-info hidden"></p>
+                        <button id="checkButton" class="primary-button">Verificar</button>
+                    </div>
+                </div>
+
+                <div id="feedbackSection" class="feedback-section hidden">
+                    <div class="feedback-header">
+                        <h3>Resultado</h3>
+                    </div>
+                    <div id="feedbackContent" class="feedback-content">
+                        <!-- El feedback se insertará aquí dinámicamente -->
+                    </div>
+                    <div class="comparison-section">
+                        <div class="translation-comparison">
+                            <p><span class="label">👨‍🏫:</span> <span id="originalSentenceFeedback"></span></p>
+                            <p>
+                                <span class="label">🤖:</span> <span id="correctTranslationFeedback"></span>
+                                <button id="listenButton" class="listen-button">🔈</button>
+                            </p>
+                            <p><span class="label">🤓:</span> <span id="userTranslationFeedback"></span></p>
+                        </div>
+                        <button id="nextButton" class="primary-button">Siguiente</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="src/app.ts"></script>
+</body>
+</html> 

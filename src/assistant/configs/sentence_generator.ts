@@ -1,5 +1,5 @@
-import { AssistantConfig } from './assistant_config.js';
-import { z } from "zod";
+import { z } from 'zod';
+import type { AssistantConfig } from './assistant_config.js';
 
 const Sentence = z.object({
     original: z.string(),
