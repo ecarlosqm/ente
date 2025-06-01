@@ -19,7 +19,8 @@ export class Assistant {
                 model: this.config.model,
                 instructions: this.config.instructions,
                 input: content,
-                text: this.config.text
+                text: this.config.text,
+                temperature: this.config.temperature,
             });
             logger.info({
                 message: 'Assistant response',

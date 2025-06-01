@@ -3,17 +3,17 @@ import { SentenceGenerator } from "./services/sentence_generator";
 import { TranslationAnalyser } from "./services/translation_analyser";
 import type { Sentence } from "./assistant/configs/sentence_generator";
 import type { TranslationError } from "./assistant/configs/translation_analyser";
-import RequiredWordsService from "./services/required_words_service";
+import SuggestedWordsService from "./services/suggested_words_service";
 
 class App {
     private openai?: OpenAI;
     private sentenceGenerator?: SentenceGenerator;
     private translationAnalyser?: TranslationAnalyser;
-    private requiredWordsService?: RequiredWordsService;
+    private suggestedWordsService?: SuggestedWordsService;
 
     private currentSentences: Sentence[];
     private currentSentenceIndex: number;
-    private requiredWords: Set<string>;
+    private suggestedWords: Set<string>;
 
     private themeInput: HTMLInputElement;
     private startButton: HTMLButtonElement;
@@ -30,17 +30,17 @@ class App {
     private correctTranslationFeedback: HTMLElement;
     private userTranslationFeedback: HTMLElement;
     private nextButton: HTMLButtonElement;
-    private requiredWordInput: HTMLInputElement;
+    private suggestedWordInput: HTMLInputElement;
     private addWordButton: HTMLButtonElement;
-    private requiredWordsList: HTMLElement;
-    private toggleRequiredWordsBtn: HTMLButtonElement;
-    private closeRequiredWordsBtn: HTMLButtonElement;
-    private requiredWordsSection: HTMLDivElement;
+    private suggestedWordsList: HTMLElement;
+    private toggleSuggestedWordsBtn: HTMLButtonElement;
+    private closeSuggestedWordsBtn: HTMLButtonElement;
+    private suggestedWordsSection: HTMLDivElement;
 
     constructor() {
         this.currentSentences = [];
         this.currentSentenceIndex = 0;
-        this.requiredWords = new Set();
+        this.suggestedWords = new Set();
         
             // Elementos del DOM
         this.themeInput = document.getElementById('themeInput') as HTMLInputElement;
@@ -58,20 +58,20 @@ class App {
         this.userTranslationFeedback = document.getElementById('userTranslationFeedback') as HTMLElement;
         this.nextButton = document.getElementById('nextButton') as HTMLButtonElement;
         this.listenButton = document.getElementById('listenButton') as HTMLButtonElement;
-        this.requiredWordInput = document.getElementById('requiredWordInput') as HTMLInputElement;
+        this.suggestedWordInput = document.getElementById('suggestedWordInput') as HTMLInputElement;
         this.addWordButton = document.getElementById('addWordButton') as HTMLButtonElement;
-        this.requiredWordsList = document.getElementById('requiredWordsList') as HTMLElement;
-        this.toggleRequiredWordsBtn = document.getElementById('toggleRequiredWords') as HTMLButtonElement;
-        this.closeRequiredWordsBtn = document.getElementById('closeRequiredWords') as HTMLButtonElement;
-        this.requiredWordsSection = document.querySelector('.required-words-section') as HTMLDivElement;
+        this.suggestedWordsList = document.getElementById('suggestedWordsList') as HTMLElement;
+        this.toggleSuggestedWordsBtn = document.getElementById('toggleSuggestedWords') as HTMLButtonElement;
+        this.closeSuggestedWordsBtn = document.getElementById('closeSuggestedWords') as HTMLButtonElement;
+        this.suggestedWordsSection = document.querySelector('.suggested-words-section') as HTMLDivElement;
 
         // Event listeners
         this.startButton.addEventListener('click', () => this.startPractice());
         this.checkButton.addEventListener('click', () => this.checkTranslation());
         this.nextButton.addEventListener('click', () => this.nextSentence());
-        this.addWordButton.addEventListener('click', () => this.addRequiredWord());
-        this.requiredWordInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.addRequiredWord();
+        this.addWordButton.addEventListener('click', () => this.addSuggestedWord());
+        this.suggestedWordInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.addSuggestedWord();
         });
         this.themeInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') this.startPractice();
@@ -83,11 +83,11 @@ class App {
             }
         });
         this.listenButton.addEventListener('click', () => this.listenSentence());
-        this.toggleRequiredWordsBtn.addEventListener('click', () => {
-            this.requiredWordsSection.classList.toggle('hidden');
+        this.toggleSuggestedWordsBtn.addEventListener('click', () => {
+            this.suggestedWordsSection.classList.toggle('hidden');
         });
-        this.closeRequiredWordsBtn.addEventListener('click', () => {
-            this.requiredWordsSection.classList.add('hidden');
+        this.closeSuggestedWordsBtn.addEventListener('click', () => {
+            this.suggestedWordsSection.classList.add('hidden');
         });
 
         // Load dependencies
@@ -96,43 +96,43 @@ class App {
 
     async init() {
         await this.loadDependencies();
-        this.loadRequiredWords();
+        this.loadSuggestedWords();
         speechSynthesis.getVoices();
     }
 
-    private addRequiredWord() {
-        const word = this.requiredWordInput.value.trim();
+    private addSuggestedWord() {
+        const word = this.suggestedWordInput.value.trim();
         if (!word) return;
 
-        if (this.requiredWords.has(word)) {
+        if (this.suggestedWords.has(word)) {
             alert('Esta palabra o frase ya está en la lista');
             return;
         }
 
-        this.requiredWords.add(word);
-        this.requiredWordsService!.addWord(word);
-        this.updateRequiredWordsList();
-        this.requiredWordInput.value = '';
-        this.requiredWordInput.focus();
+        this.suggestedWords.add(word);
+        this.suggestedWordsService!.addWord(word);
+        this.updateSuggestedWordsList();
+        this.suggestedWordInput.value = '';
+        this.suggestedWordInput.focus();
     }
 
-    private removeRequiredWord(word: string) {
-        this.requiredWords.delete(word);
-        this.requiredWordsService!.removeWord(word);
-        this.updateRequiredWordsList();
+    private removeSuggestedWord(word: string) {
+        this.suggestedWords.delete(word);
+        this.suggestedWordsService!.removeWord(word);
+        this.updateSuggestedWordsList();
     }
 
-    private updateRequiredWordsList() {
-        this.requiredWordsList.innerHTML = '';
-        this.requiredWords.forEach(word => {
+    private updateSuggestedWordsList() {
+        this.suggestedWordsList.innerHTML = '';
+        this.suggestedWords.forEach(word => {
             const tag = document.createElement('div');
-            tag.className = 'required-word-tag';
+            tag.className = 'suggested-word-tag';
             tag.innerHTML = `
                 ${word}
                 <button type="button" aria-label="Eliminar ${word}">×</button>
             `;
-            tag.querySelector('button')?.addEventListener('click', () => this.removeRequiredWord(word));
-            this.requiredWordsList.appendChild(tag);
+            tag.querySelector('button')?.addEventListener('click', () => this.removeSuggestedWord(word));
+            this.suggestedWordsList.appendChild(tag);
         });
     }
 
@@ -160,14 +160,14 @@ class App {
         }
         this.sentenceGenerator = new SentenceGenerator(this.openai!);
         this.translationAnalyser = new TranslationAnalyser(this.openai!);
-        this.requiredWordsService = new RequiredWordsService();
+        this.suggestedWordsService = new SuggestedWordsService();
     }
 
-    private loadRequiredWords() {
-        const requiredWords = this.requiredWordsService!.getRequiredWords();
-        this.requiredWords = new Set(requiredWords);
-        console.log(this.requiredWords);
-        this.updateRequiredWordsList();
+    private loadSuggestedWords() {
+        const suggestedWords = this.suggestedWordsService!.getSuggestedWords();
+        this.suggestedWords = new Set(suggestedWords);
+        console.log(this.suggestedWords);
+        this.updateSuggestedWordsList();
     }
 
     async startPractice() {
@@ -186,8 +186,8 @@ class App {
             this.startButton.disabled = true;
             this.startButton.textContent = 'Cargando...';
 
-            const requiredWordsArray = Array.from(this.requiredWords);
-            this.currentSentences = await this.sentenceGenerator!.generateSentences(theme, requiredWordsArray);
+            const suggestedWordsArray = Array.from(this.suggestedWords);
+            this.currentSentences = await this.sentenceGenerator!.generateSentences(theme, suggestedWordsArray);
             this.currentSentenceIndex = 0;
 
             this.practiceSection.classList.remove('hidden');

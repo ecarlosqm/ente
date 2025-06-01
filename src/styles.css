@@ -259,7 +259,7 @@ body {
     }
 }
 
-.required-words-section {
+.suggested-words-section {
     background-color: var(--card-background);
     border-radius: 1rem;
     padding: 1.5rem;
@@ -267,11 +267,11 @@ body {
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
 }
 
-.required-words-header {
+.suggested-words-header {
     margin-bottom: 1rem;
 }
 
-.required-words-header h3 {
+.suggested-words-header h3 {
     font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
@@ -282,20 +282,20 @@ body {
     font-size: 0.875rem;
 }
 
-.required-words-input {
+.suggested-words-input {
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
     flex-direction: column;
 }
 
-.required-words-list {
+.suggested-words-list {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
 }
 
-.required-word-tag {
+.suggested-word-tag {
     background-color: var(--primary-color);
     color: white;
     padding: 0.5rem 1rem;
@@ -306,7 +306,7 @@ body {
     gap: 0.5rem;
 }
 
-.required-word-tag button {
+.suggested-word-tag button {
     background: none;
     border: none;
     color: white;
@@ -317,7 +317,7 @@ body {
     transition: opacity 0.2s;
 }
 
-.required-word-tag button:hover {
+.suggested-word-tag button:hover {
     opacity: 1;
 }
 
@@ -346,7 +346,7 @@ body {
     background-color: #0056b3;
 }
 
-.required-words-section {
+.suggested-words-section {
     position: fixed;
     bottom: 80px;
     right: 20px;
@@ -359,7 +359,7 @@ body {
     transition: transform 0.3s, opacity 0.3s;
 }
 
-.required-words-section.hidden {
+.suggested-words-section.hidden {
     transform: translateY(20px);
     opacity: 0;
     pointer-events: none;
