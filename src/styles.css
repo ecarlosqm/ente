@@ -169,17 +169,26 @@ body {
     text-transform: capitalize;
     margin-bottom: 0.5rem;
     display: inline-block;
-}
-
-.error-tag.grammar {
     background-color: #ff6b6b;
 }
 
+.error-tag.grammar {
+    background-color: #ffd43b;
+}
+
 .error-tag.spelling {
-    background-color: #4dabf7;
+    background-color: #ffd43b;
 }
 
 .error-tag.punctuation {
+    background-color: #ffd43b;
+}
+
+.error-tag.semantic {
+    background-color: #ffd43b;
+}
+
+.error-tag.idiomatic {
     background-color: #ffd43b;
 }
 
