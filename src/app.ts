@@ -241,6 +241,7 @@ class App {
         const avaVoice = voices.find(voice => voice.name === 'Ava');
         const firstVoice = voices[0];
         utterance.voice = avaVoice ?? firstVoice ?? null;
+        utterance.rate = 0.8;
         speechSynthesis.speak(utterance);
     }
 }
