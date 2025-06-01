@@ -76,7 +76,7 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
 
         1. THEME (el tema gramatical que se está practicando)
         2. ORIGINAL (la frase en español)
-        3. TRANSLATION (la versión correcta y natural en inglés)
+        3. TRANSLATION (la versión hecha por una inteligencia artificial)
         4. STUDENT_TRANSLATION (la versión que el alumno ha escrito en inglés)
 
     Debes realizar lo siguiente:
@@ -88,7 +88,7 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
             - Fluidez y estilo: ¿Suena natural para un hablante nativo de inglés? ¿Mantiene el registro y tono apropiados?
             - Fidelidad idiomática: ¿Evita calcos literales innecesarios y emplea expresiones propias del inglés?
         3. Proporcionar un análisis detallado que incluya:
-            - Errores específicos detectados.
+            - Errores detectados. Incluyendo errores en fluidez, estilo, fidelidad idiomática, etc.
             - Para cada error:
             - Descripción clara y precisa de en qué consiste.
             - Corrección sugerida: Presentar la frase (o fragmento) corregida, con la solución adecuada.

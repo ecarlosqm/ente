@@ -80,7 +80,11 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
             - Si las PALABRAS_SUGERIDAS son en inglés, usa su traducción al español en la oración de forma natural y coherente, tal como lo haría un nativo.
             - Si en las PALABRAS_SUGERIDAS hay un verbo conjugalo de la manejra correcta, se creativo.
 
-        b) La traducción de esa oración al inglés, en un estilo completamente natural, como lo diría un nativo angloparlante. La traducción debe transmitir el sentido y matices de la frase española, sin atarse a una traducción literal palabra por palabra.
+        b) La traducción de esa oración al inglés que:
+            - Este en un estilo completamente natural, como lo diría un nativo angloparlante.
+            - Transmitir el sentido y matices de la frase española.
+            - No se limite a una traducción literal palabra por palabra.
+            - Debe respetar si se trata de una frase, pregunta, afirmación, negación, etc.
         c) Un contexto en español para la oración. Solo si hay polisemia.
     `
 };
