@@ -3,5 +3,5 @@ export interface AssistantConfig {
     model: string;
     instructions?: string;
     text: any;
-    temperature?: number;
+    temperature?: number | null;
 }

@@ -22,7 +22,7 @@ export type TranslationAnalysisResponse = z.infer<typeof TranslationAnalysisResp
 export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
     name: 'translation_analyser',
     model: 'gpt-4o',
-    temperature: 1,
+    temperature: null,
     text: {
         format: {
             "type": "json_schema",

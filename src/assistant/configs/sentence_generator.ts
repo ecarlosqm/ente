@@ -23,7 +23,7 @@ export type GenerateSentencesResponse = z.infer<typeof GenerateSentencesResponse
 export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
     name: 'sentence_generator',
     model: 'gpt-4o',
-    temperature: 1.2,
+    temperature: null,
     text: {
         format: {
             "type": "json_schema",
