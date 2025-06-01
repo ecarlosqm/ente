@@ -46,7 +46,7 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
                                 },
                                 "context": {
                                     "type": "string",
-                                    "description": "A context in spanish for the sentence. Only if there is a polisemia or contextual ambiguity."
+                                    "description": "A context in spanish for the sentence. Only if there is a polisemia."
                                 }
                             },
                             "required": [
@@ -70,12 +70,12 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
 
     1. Producir exactamente 5 bloques de texto, cada uno formado por:
         a) Una oración en español que:
-            - Sea plausible en una conversación cotidiana entre hablantes nativos.
+            - Sea plausible en una conversación cotidiana entre hablantes nativos inteligentes, interesantes y sabios.
             - Ilustre de forma clara y abundante el “TEMA_GRAMATICAL” indicado (sin mezclar con otros tiempos o construcciones, salvo que sea imprescindible para la coherencia).
             - Que no se limite al contexto educativo, puesto que el objetivo es que el alumno pueda usar las oraciones en una conversación cotidiana.
             - No tenga título, numeración ni explicaciones: solo la oración.
         b) La traducción de esa oración al inglés, en un estilo completamente natural, como lo diría un nativo angloparlante. La traducción debe transmitir el sentido y matices de la frase española, sin atarse a una traducción literal palabra por palabra.
-        c) Un contexto en español para la oración. Solo polisemia o ambigüedad contextual.
+        c) Un contexto en español para la oración. Solo si hay polisemia.
 
     2. Seguir estas pautas adicionales:
         - No des más bloques de texto de los solicitados (5 está bien).

@@ -37,7 +37,7 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
                             "properties": {
                                 "error": {
                                     "type": "string",
-                                    "description": "Cited error in the student's translation, which may include grammar, spelling, or punctuation mistakes. Must be short and concise, ideally one word or a short phrase."
+                                    "description": "Cited error of the student's translation, which may include grammar, spelling, or punctuation mistakes. Must be short and concise, ideally one word or a short phrase."
                                 },
                                 "correct": {
                                     "type": "string",
