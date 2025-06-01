@@ -62,6 +62,7 @@ class App {
         this.listenButton.addEventListener('click', () => this.listenSentence());
         // Load dependencies
         this.loadDependencies();
+        speechSynthesis.getVoices();
     }
 
     async getApiKey() {
@@ -105,10 +106,10 @@ class App {
         try {
             this.startButton.disabled = true;
             this.startButton.textContent = 'Cargando...';
-            
+
             this.currentSentences = await this.sentenceGenerator!.generateSentences(theme);
             this.currentSentenceIndex = 0;
-            
+
             this.practiceSection.classList.remove('hidden');
             this.sentenceSection.classList.remove('hidden');
             this.feedbackSection.classList.add('hidden');
@@ -147,7 +148,7 @@ class App {
         }
 
         const currentSentence = this.currentSentences[this.currentSentenceIndex];
-        
+
         try {
             this.checkButton.disabled = true;
             this.checkButton.textContent = 'Verificando...';
@@ -171,7 +172,7 @@ class App {
 
     showFeedback(errors: TranslationError[], currentSentence: Sentence, userTranslation: string) {
         this.feedbackContent.innerHTML = '';
-        
+
         if (errors.length === 0) {
             const successItem = document.createElement('div');
             successItem.className = 'feedback-item success';
@@ -186,7 +187,7 @@ class App {
                 errorTag.className = `error-tag ${error.type}`;
                 errorTag.textContent = error.type;
                 errorItem.appendChild(errorTag);
-                
+
                 const errorContent = document.createElement('div');
                 errorContent.className = 'error-content';
                 errorContent.innerHTML = `
@@ -196,7 +197,7 @@ class App {
                         <span style="color: green;">${error.correct}</span>
                     </p>
                 `;
-                
+
                 errorItem.appendChild(errorContent);
                 const explanationP = document.createElement('p');
                 explanationP.style.margin = '0';
@@ -231,8 +232,15 @@ class App {
         }
     }
 
-    listenSentence() {
-        const utterance = new SpeechSynthesisUtterance(this.originalSentence.textContent!);
+    async listenSentence() {
+        const sentence = this.currentSentences[this.currentSentenceIndex];
+        if (!sentence) return;
+        const utterance = new SpeechSynthesisUtterance(sentence.translation);
+        utterance.lang = 'en-US';
+        const voices = speechSynthesis.getVoices().filter(voice => voice.lang === 'en-US');
+        const avaVoice = voices.find(voice => voice.name === 'Ava');
+        const firstVoice = voices[0];
+        utterance.voice = avaVoice ?? firstVoice ?? null;
         speechSynthesis.speak(utterance);
     }
 }
