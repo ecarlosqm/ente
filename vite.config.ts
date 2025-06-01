@@ -1,9 +1,9 @@
 import type { UserConfig } from 'vite'
 
 export default {
-    base: '/<REPO>/',
+    base: '/ente/',
     build: {
         outDir: 'dist',
-        assetsDir: '.',
+        assetsDir: 'assets',
     }
 } satisfies UserConfig
