@@ -74,6 +74,7 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
             - Ilustre de forma clara y abundante el “TEMA_GRAMATICAL” indicado (sin mezclar con otros tiempos o construcciones, salvo que sea imprescindible para la coherencia).
             - Que no se limite al contexto educativo, puesto que el objetivo es que el alumno pueda usar las oraciones en una conversación cotidiana.
             - No tenga título, numeración ni explicaciones: solo la oración.
+            - Evita completamente construcciones poéticas, metáforas, símiles o cualquier tipo de lenguaje adornado; mantén una redacción sobria, directa, concreta y funcional, enfocada en lo observable y sin exageraciones emocionales.
         b) La traducción de esa oración al inglés, en un estilo completamente natural, como lo diría un nativo angloparlante. La traducción debe transmitir el sentido y matices de la frase española, sin atarse a una traducción literal palabra por palabra.
         c) Un contexto en español para la oración. Solo si hay polisemia.
 
