@@ -239,8 +239,8 @@ class App {
         utterance.lang = 'en-US';
         const voices = speechSynthesis.getVoices().filter(voice => voice.lang === 'en-US');
         const avaVoice = voices.find(voice => voice.name === 'Ava');
-        const firstVoice = voices[0];
-        utterance.voice = avaVoice ?? firstVoice ?? null;
+        const samanthaVoice = voices.find(voice => voice.name === 'Samantha');
+        utterance.voice = avaVoice ?? samanthaVoice ?? voices[0] ?? null;
         utterance.rate = 0.8;
         speechSynthesis.speak(utterance);
     }
