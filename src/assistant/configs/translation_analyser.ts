@@ -97,7 +97,7 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
         - Descripción clara y precisa de en qué consiste.
         - Corrección sugerida.
         - Tipo de error.
-        - Explicación pedagógica de ser necesaria.
+        - Explicación pedagógica de porqué esta mal y que cosas hay que tener en cuenta para no cometer el mismo error.
 
     Consideraciones adicionales:
         - No corrijas los puntos finales de las frases.
