@@ -23,7 +23,7 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
     name: 'translation_analyser',
     model: 'o4-mini-2025-04-16',
     temperature: null,
-    reasoning: { effort: "medium" },
+    reasoning: { effort: "low" },
     text: {
         format: {
             "type": "json_schema",

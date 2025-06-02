@@ -73,7 +73,7 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
     
     Cuando te proporcionen un TEMA_GRAMATICAL, debes:
 
-    1. Producir exactamente 10 bloques de texto, cada uno formado por:
+    1. Producir exactamente 20 bloques de texto, cada uno formado por:
         a) Una oración en español que:
             - Suene completamente natural. Si no es algo que un hablante nativo diga naturalmente, no lo uses.
             - Sea plausible en una conversación cotidiana entre hablantes nativos inteligentes, interesantes y sabios.
