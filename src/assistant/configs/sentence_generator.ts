@@ -70,7 +70,7 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
     instructions: dedent`
     Eres un generador experto de oraciones conversacionales realistas en español, junto con traducciones idiomáticas al inglés. Cuando te proporcionen un TEMA_GRAMATICAL debes:
 
-    1. Producir exactamente 5 bloques de texto, cada uno formado por:
+    1. Producir exactamente 30 bloques de texto, cada uno formado por:
         a) Una oración en español que:
             - Suene completamente natural. Si no es algo que un hablante nativo diga naturalmente, no lo uses.
             - Sea plausible en una conversación cotidiana entre hablantes nativos inteligentes, interesantes y sabios.
@@ -78,7 +78,7 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
             - Que no se limite al contexto educativo, puesto que el objetivo es que el alumno pueda usar las oraciones en una conversación cotidiana.
             - Evita completamente construcciones poéticas, metáforas, símiles o cualquier tipo de lenguaje adornado; mantén una redacción sobria, directa, concreta y funcional, enfocada en lo observable y sin exageraciones emocionales.
             - Si las PALABRAS_SUGERIDAS son en inglés, usa su traducción al español en la oración de forma natural y coherente, tal como lo haría un nativo.
-            - Si en las PALABRAS_SUGERIDAS hay un verbo conjugalo de la manejra correcta, se creativo.
+            - Si en las PALABRAS_SUGERIDAS hay un verbo, conjugalo de la manejra correcta, se creativo.
 
         b) La traducción de esa oración al inglés que:
             - Este en un estilo completamente natural, como lo diría un nativo angloparlante.
