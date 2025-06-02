@@ -22,8 +22,9 @@ export type GenerateSentencesResponse = z.infer<typeof GenerateSentencesResponse
 
 export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
     name: 'sentence_generator',
-    model: 'gpt-4o',
+    model: 'o4-mini-2025-04-16',
     temperature: null,
+    reasoning: { effort: "low" },
     text: {
         format: {
             "type": "json_schema",
@@ -68,9 +69,11 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
         }
     },
     instructions: dedent`
-    Eres un generador experto de oraciones conversacionales realistas en español, junto con traducciones idiomáticas al inglés. Cuando te proporcionen un TEMA_GRAMATICAL debes:
+    Eres un generador experto de oraciones conversacionales realistas en español latinoamericano de México, junto con sus traducciones al inglés estadounidense.
+    
+    Cuando te proporcionen un TEMA_GRAMATICAL, debes:
 
-    1. Producir exactamente 30 bloques de texto, cada uno formado por:
+    1. Producir exactamente 10 bloques de texto, cada uno formado por:
         a) Una oración en español que:
             - Suene completamente natural. Si no es algo que un hablante nativo diga naturalmente, no lo uses.
             - Sea plausible en una conversación cotidiana entre hablantes nativos inteligentes, interesantes y sabios.
@@ -85,6 +88,10 @@ export const SENTENCE_GENERATOR_CONFIG: AssistantConfig = {
             - Transmitir el sentido y matices de la frase española.
             - No se limite a una traducción literal palabra por palabra.
             - Debe respetar si se trata de una frase, pregunta, afirmación, negación, etc.
-        c) Un contexto en español para la oración. Solo si hay polisemia.
+            
+        c) Un contexto en español para la oración.
+            - Si hay polisemia.
+            - Si no se entiende si el pronombre es de persona o de cosa.
+            - Si no se entiende el género del pronombre.
     `
 };

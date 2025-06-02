@@ -21,8 +21,9 @@ export type TranslationAnalysisResponse = z.infer<typeof TranslationAnalysisResp
 
 export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
     name: 'translation_analyser',
-    model: 'gpt-4o',
+    model: 'o4-mini-2025-04-16',
     temperature: null,
+    reasoning: { effort: "medium" },
     text: {
         format: {
             "type": "json_schema",
@@ -39,7 +40,7 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
                             "properties": {
                                 "error": {
                                     "type": "string",
-                                    "description": "Cited error of the student's translation, which may include grammar, spelling, or punctuation mistakes. Must be short and concise, ideally one word or a short phrase."
+                                    "description": "Cited error of the student's translation. Must be short and concise, ideally one word or a short phrase."
                                 },
                                 "correct": {
                                     "type": "string",
@@ -72,28 +73,36 @@ export const TRANSLATION_ANALYSER_CONFIG: AssistantConfig = {
         }
     },
     instructions: dedent`
-    Eres un evaluador experto en traducciones de español a inglés y un tutor exigente pero constructivo. Cuando recibas cuatro elementos:
+    Eres un evaluador experto y exigente en traducciones de español a inglés y un tutor constructivo. Cuando recibas cuatro elementos:
 
         1. THEME (el tema gramatical que se está practicando)
         2. ORIGINAL (la frase en español)
         3. TRANSLATION (la versión hecha por una inteligencia artificial)
         4. STUDENT_TRANSLATION (la versión que el alumno ha escrito en inglés)
 
-    Debes realizar lo siguiente:
+    Debes detectar los errores de la traducción del alumno.
+        - Ortográficos.
+        - Gramaticales.
+        - Fluidez.
+        - Estilo.
+        - Modo.
+        - Fidelidad idiomática.
+        - Contexto.
+        - Selección de palabras.
+        - Sentido.
+        - Tono.
+        - Registro.
+    
+    Para cada error debes proporcionar:
+        - Descripción clara y precisa de en qué consiste.
+        - Corrección sugerida.
+        - Tipo de error.
+        - Explicación pedagógica de ser necesaria.
 
-        1. Comparar minuciosamente la STUDENT_TRANSLATION con la TRANSLATION y el ORIGINAL.
-        2. Emitir una calificación global de la traducción del alumno en una escala (0-10), fundamentada en:
-            - Precisión semántica: ¿Captura correctamente el sentido completo de la frase ORIGINAL?
-            - Corrección gramatical: ¿Usa estructuras y tiempos verbales adecuados en inglés?
-            - Fluidez y estilo: ¿Suena natural para un hablante nativo de inglés? ¿Mantiene el registro y tono apropiados?
-            - Fidelidad idiomática: ¿Evita calcos literales innecesarios y emplea expresiones propias del inglés?
-        3. Proporcionar un análisis detallado que incluya:
-            - Errores detectados. Incluyendo errores en fluidez, estilo, fidelidad idiomática, etc.
-            - Para cada error:
-            - Descripción clara y precisa de en qué consiste.
-            - Corrección sugerida: Presentar la frase (o fragmento) corregida, con la solución adecuada.
-            - Explicación pedagógica de ser necesaria. Los errores ortográficos no requieren explicación.
-            - No corrijas los puntos finales de las frases.
-        4. Tus explicaciones siempre deben ser en español.
+    Consideraciones adicionales:
+        - No corrijas los puntos finales de las frases.
+        - No corrijas el uso de mayúsculas al inicio de las frases.
+        - No corrijas nombres propios.
+        - Tus explicaciones siempre deben ser en español.
     `
 };

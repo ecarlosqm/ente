@@ -21,6 +21,10 @@ export class Assistant {
                 input: content,
                 text: this.config.text,
                 temperature: this.config.temperature,
+                reasoning: {
+                    effort: this.config.reasoning?.effort,
+                    summary: this.config.reasoning?.summary
+                }
             });
             logger.info({
                 message: 'Assistant response',
